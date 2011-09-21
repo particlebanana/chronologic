@@ -19,7 +19,11 @@ Gem::Specification.new do |s|
   s.executables   = `git ls-files -- bin/*`.split("\n").map{ |f| File.basename(f) }
   s.require_paths = ["lib"]
 
+  # Database Drivers
   s.add_dependency('cassandra', ["0.11.3"])
+  s.add_dependency('mongo', ["~> 1.4.0"])
+  s.add_dependency('bson_ext', ["~> 1.4.0"])
+  
   s.add_dependency('httparty', ["~> 0.6.1"])
   s.add_dependency('hashie', ["~> 0.4.0"])
   s.add_dependency('will_paginate', ["~> 3.0.pre2"])
