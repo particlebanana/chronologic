@@ -5,10 +5,15 @@ require "chronologic/cassandra_ext"
 
 module Chronologic
 
-  mattr_accessor :connection
-
+  mattr_accessor :connection, :driver
+  
   def self.schema
-    Chronologic::Service::Schema
+    case self.driver
+    when :MongoDB
+      Chronologic::Service::Schema::MongoDB
+    when :Cassandra
+      Chronologic::Service::Schema::Cassandra
+    end
   end
 
   autoload :Event, "chronologic/event"
