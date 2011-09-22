@@ -254,7 +254,9 @@ module Chronologic::Service::Schema::MongoDB
   end
 
   def self.batch
-    connection.batch { yield }
+    # Note: MongoDB doesn't have a batch command at this time
+    # Just yield so the Protocol API stays the same.
+    yield
   end
 
   def self.connection
