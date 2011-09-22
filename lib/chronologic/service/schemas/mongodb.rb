@@ -139,14 +139,13 @@ module Chronologic::Service::Schema::MongoDB
     timeline_data = {}
     case timeline
     when String
-      connection[:Timeline].find({ "_id" => timeline }).skip(skip).limit(count).map { |e| e['events'] }.to_a.each do |event|
+      connection[:Timeline].find({ "_id" => timeline }).map { |e| e['events'] }.to_a.each do |event|
         event.map { |e| data << e }
       end
     when Array
       return {} if timeline.empty?
-      connection[:Timeline].find({ "_id" => { "$in" => timeline } }).sort(["value", :desc]).skip(skip).limit(count).to_a.each do |objects|
-        #puts objects.inspect
-        #subscription['subscribers'].each { |sub| subscribers << sub.keys.first}
+      connection[:Timeline].find({ "_id" => { "$in" => timeline } }).map { |e| e['events']}.to_a.each do |event|
+        event.map { |e| data << e}
       end
     end
     # Ya it's ugly
@@ -158,14 +157,7 @@ module Chronologic::Service::Schema::MongoDB
   def self.timeline_events_for(timeline, options={})
     log("timeline_events_for(#{timeline})")
 
-    case timeline
-    when String
-      timeline_for(timeline, options)
-    when Array
-      timeline_for(timeline).inject({}) do |hsh, (timeline_key, column)| 
-        hsh.update(timeline_key => column.values)
-      end
-    end
+    timeline_for(timeline, options)
   end
 
   def self.remove_timeline_event(timeline, uuid)
