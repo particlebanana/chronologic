@@ -68,7 +68,6 @@ describe Chronologic::Service::Schema::MongoDB do
     @schema.subscribers_for("user_1").should == []
   end
 
-
   it 'checks whether a feed is connected to a timeline' do
     @schema.create_subscription('user_1_home', 'user_2', 'user_1')
     @schema.create_subscription('user_3_home', 'user_2', 'user_3')
@@ -154,12 +153,11 @@ describe Chronologic::Service::Schema::MongoDB do
 
       @schema.create_timeline_event("_global", token, key)
       result.update(token => key)
-    }.to_a#.sort_by { |token, key| token }
+    }.to_a
 
     events = @schema.timeline_for("_global", :per_page => 10)
     events.length.should == 10
-    #events.sort_by { |token, key| token }.should == tokens.slice(5, 10)
-    events.to_a.should == tokens.reverse!.slice(0, 10)
+    events.to_a.should == tokens.slice(0, 10)
   end
 
   it "fetches timeline events from a page offset" do
@@ -322,7 +320,7 @@ describe Chronologic::Service::Schema::MongoDB do
       timeline[0].subevents.length.should == 1
       timeline[1].subevents.length.should == 0
       timeline[2].subevents.length.should == 1
-      timeline[2].subevents[0].subevents.length.should == 1
+      timeline[0].subevents[0].subevents.length.should == 1
     end
 
   end
@@ -342,4 +340,3 @@ describe Chronologic::Service::Schema::MongoDB do
     Chronologic.connection = double
   end
 end
-

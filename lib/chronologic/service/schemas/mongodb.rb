@@ -7,7 +7,7 @@ module Chronologic::Service::Schema::MongoDB
   def self.create_object(key, attrs)
     log "create_object(#{key})"
 
-    connection[:Object].insert({ "_id" => key, "value" => attrs })
+    connection[:Object].insert(attrs.merge({"_id" => key}))
   end
 
   def self.remove_object(object_key)
@@ -21,15 +21,19 @@ module Chronologic::Service::Schema::MongoDB
 
     case object_key
     when String
-      obj = connection[:Object].find({ "_id" => object_key.to_s }).map { |e| e['value'] }.to_a
-
-      obj.empty? ? Hash.new : obj.first
+      obj = connection[:Object].find_one({ "_id" => object_key })
+      obj.delete('_id') if obj
+      obj ? obj : Hash.new
     when Array
       return {} if object_key.empty?
-      values = {}
-      connection[:Object].find({ "_id" => { "$in" => object_key } }).to_a.map{ |e| values[e['_id']] = e['value'] }
+      hsh, objs = {}, []
+      connection[:Object].find({ "_id" => { "$in" => object_key } }).to_a.each do |obj|
+        id = obj['_id']
+        hsh[id] = obj
+        hsh[id].delete('_id')
+      end
 
-      values
+      hsh
     end
   end
 
@@ -69,6 +73,8 @@ module Chronologic::Service::Schema::MongoDB
   end
 
   def self.followers_for(timeline_key)
+    log("followers_for(#{timeline_key})")
+
     followers = []
     connection[:Subscription].find({ "_id" => timeline_key }).limit(MAX_SUBSCRIPTIONS).to_a.each do |subscription|
       subscription['subscribers'].each { |sub| followers << sub.values.first }
@@ -80,13 +86,13 @@ module Chronologic::Service::Schema::MongoDB
   def self.create_event(event_key, data)
     log("create_event(#{event_key})")
 
-    connection[:Event].insert({ "_id" => event_key, "value" => data })
+    connection[:Event].insert(data.merge({"_id" => event_key}))
   end
 
   def self.update_event(event_key, data)
     log("update_event(#{event_key})")
 
-    connection[:Event].update({"_id" => event_key}, {"$set" => {"value" => data}})
+    connection[:Event].update({"_id" => event_key}, {"$set" => data})
   end
 
   def self.remove_event(event_key)
@@ -107,15 +113,19 @@ module Chronologic::Service::Schema::MongoDB
 
     case event_key
     when String
-      obj = connection[:Event].find({ "_id" => event_key }).map { |e| e['value'] }.to_a
-
-      obj.empty? ? Hash.new() : obj.first
+      obj = connection[:Event].find_one({ "_id" => event_key })
+      obj.delete('_id') if obj
+      obj ? obj : Hash.new
     when Array
       return {} if event_key.empty?
-      values = {}
-      connection[:Event].find({ "_id" => { "$in" => event_key } }).to_a.map{ |e| values[e['_id']] = e['value'] }
+      hsh, objs = {}, []
+      connection[:Event].find({ "_id" => { "$in" => event_key } }).sort([['token', 1]]).to_a.each do |obj|
+        id = obj['_id']
+        hsh[id] = obj
+        hsh[id].delete('_id')
+      end
 
-      values
+      hsh
     end
   end
 
@@ -148,9 +158,10 @@ module Chronologic::Service::Schema::MongoDB
         event.map { |e| data << e}
       end
     end
-    # Ya it's ugly
-    data.reverse! # force reverse chronological order
-    data[0..(count.to_i - 1)].map { |e| timeline_data[e.keys.first] = e.values.first }
+    data[0..(count.to_i - 1)].each do |obj|
+      obj.map{ |key, value| timeline_data[key] = value }
+    end
+
     timeline_data
   end
 
@@ -242,7 +253,8 @@ module Chronologic::Service::Schema::MongoDB
       end
       timeline
     end
-    timeline_index.map { |key| event_index[key] }
+    # Force reverse chronologic order
+    timeline_index.map { |key| event_index[key] }.reverse
   end
 
   def self.batch
