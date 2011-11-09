@@ -2,9 +2,10 @@ source :rubygems
 
 gemspec
 
+gem 'unicorn'
+
 group :development do
-  gem 'perftools.rb'
-  gem 'unicorn'
+  #gem 'perftools.rb'
   gem 'foreman'
   gem 'shotgun'
 end
