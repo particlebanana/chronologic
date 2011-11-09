@@ -70,9 +70,8 @@ class Chronologic::Client::Connection
       'timeline_backlink' => backlink_key
     }
     resp = self.class.get('/subscription/is_connected', :query => body)
-
     handle(resp, "Error checking connectedness") do
-      resp.body.fetch('subscriber_key', false)
+      JSON(resp.body).fetch(subscriber_key, false)
     end
   end
 

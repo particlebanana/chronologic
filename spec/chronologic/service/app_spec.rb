@@ -1,5 +1,6 @@
 require 'spec_helper'
 require 'rack/test'
+require 'logger'
 
 describe Chronologic::Service::App do
   include Rack::Test::Methods

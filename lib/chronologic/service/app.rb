@@ -1,6 +1,6 @@
 require "sinatra/base"
 require "active_support/core_ext/class"
-require "yajl"
+require "yajl/json_gem"
 
 # TODO: caching headers?
 class Chronologic::Service::App < Sinatra::Base

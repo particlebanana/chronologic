@@ -42,14 +42,12 @@ module ChronologicHelpers
     return events
   end
 
-  # Cassandra#truncate isn't reliable against cassandra-0.7.4, but
-  # this gets the job done. It's a hack, so look for a better way to do this
-  # every now and then
+  # Drop all the collections except system.indexes
+  # Need to look up how to remove indexes
   def clean_up_keyspace!(conn)
-    conn.schema.cf_defs.each do |cf|
-      conn.send(:each_key, cf.name) do |k|
-        conn.remove(cf.name, k)
-      end
+    conn.collection_names.each do |cf|
+      coll = conn.collection(cf)
+      coll.drop() unless cf == 'system.indexes'
     end
   end
 

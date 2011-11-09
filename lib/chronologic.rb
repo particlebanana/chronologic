@@ -1,7 +1,8 @@
 require "hashie"
-require "cassandra/0.7"
+require "mongo"
+require "logger"
+require "yajl/json_gem"
 require "active_support/core_ext/module"
-require "chronologic/cassandra_ext"
 
 module Chronologic
 

@@ -77,7 +77,7 @@ module Chronologic::Service::Schema::MongoDB
 
     followers = []
     connection[:Subscription].find({ "_id" => timeline_key }).limit(MAX_SUBSCRIPTIONS).to_a.each do |subscription|
-      subscription['subscribers'].each { |sub| followers << sub.values.first }
+      subscription['subscribers'].each { |sub| followers << sub.keys.first }
     end
 
     followers
@@ -158,7 +158,7 @@ module Chronologic::Service::Schema::MongoDB
         event.map { |e| data << e}
       end
     end
-    data[0..(count.to_i - 1)].each do |obj|
+    data.reverse[0..(count.to_i - 1)].each do |obj|
       obj.map{ |key, value| timeline_data[key] = value }
     end
 

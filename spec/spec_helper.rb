@@ -1,6 +1,7 @@
 require 'chronologic'
 require 'webmock/rspec'
-require 'cassandra/mock'
+require 'mongo'
+require 'json'
 require 'helpers'
 
 RSpec.configure do |config|
@@ -29,7 +30,10 @@ RSpec.configure do |config|
           'Timeline' => {}
         }
       }
-      Chronologic.connection = Cassandra::Mock.new('ChronologicTest', schema)
+      keyspace = ENV.fetch('KEYSPACE', "ChronologicTest")
+      Chronologic.driver = :MongoDB
+      Chronologic.connection = Mongo::Connection.new("localhost", 27017).db(keyspace)
+      clean_up_keyspace!(Chronologic.connection)
     end
   end
 

@@ -2,7 +2,7 @@ require 'spec_helper'
 
 describe Chronologic do
 
-  it "holds a Cassandra connection" do
+  it "holds a connection" do
     fake_connection = Object.new
     Chronologic.connection = fake_connection
     Chronologic.connection.should eq(fake_connection)
