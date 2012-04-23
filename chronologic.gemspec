@@ -20,22 +20,22 @@ Gem::Specification.new do |s|
   s.require_paths = ["lib"]
 
   # Database Drivers
-  s.add_dependency('cassandra', ["0.11.3"])
-  s.add_dependency('mongo', ["~> 1.4.0"])
-  s.add_dependency('bson_ext', ["~> 1.4.0"])
+  s.add_dependency('cassandra', ["0.12.0"])
+  s.add_dependency('mongo', ["~> 1.6.0"])
+  s.add_dependency('bson_ext', ["~> 1.6.0"])
   
-  s.add_dependency('httparty', ["~> 0.6.1"])
-  s.add_dependency('hashie', ["~> 1.1.0"])
-  s.add_dependency('will_paginate', ["~> 3.0.pre2"])
-  s.add_dependency('yajl-ruby', ["~> 0.7.7"])
+  s.add_dependency('httparty', ["~> 0.8.0"])
+  s.add_dependency('hashie', ["~> 1.2.0"])
+  s.add_dependency('will_paginate', ["~> 3.0.0"])
+  s.add_dependency('yajl-ruby', ["~> 1.1.0"])
   s.add_dependency('activesupport', ["~> 3.1.0"])
   s.add_dependency('i18n', ["~> 0.6.0"])
-  s.add_dependency('sinatra', ["~> 1.0.0"])
+  s.add_dependency('sinatra', ["~> 1.3.0"])
   s.add_dependency('activemodel', ['~> 3.1.0'])
 
   # HAX
-  s.add_dependency('thrift', ['~> 0.6.0'])
-  s.add_dependency('thrift_client', ['~> 0.6.3'])
-  s.add_dependency('simple_uuid', ['~> 0.1.0'])
+  s.add_dependency('thrift', ['~> 0.8.0'])
+  s.add_dependency('thrift_client', ['~> 0.8.0'])
+  s.add_dependency('simple_uuid', ['~> 0.2.0'])
 end
 
