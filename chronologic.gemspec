@@ -34,8 +34,8 @@ Gem::Specification.new do |s|
   s.add_dependency('activemodel', ['~> 3.1.0'])
 
   # HAX
-  s.add_dependency('thrift', ['~> 0.6.0'])
-  s.add_dependency('thrift_client', ['~> 0.6.3'])
+  s.add_dependency('thrift', ['~> 0.8.0'])
+  s.add_dependency('thrift_client', ['~> 0.8.0'])
   s.add_dependency('simple_uuid', ['~> 0.1.0'])
 end
 
