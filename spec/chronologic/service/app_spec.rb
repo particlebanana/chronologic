@@ -14,7 +14,6 @@ describe Chronologic::Service::App do
     }
 
     post "/object", {:object_key => "spot_1", :data => data}
-
     last_response.status.should == 201
     Chronologic.schema.object_for("spot_1").should == data
   end

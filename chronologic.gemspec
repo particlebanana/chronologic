@@ -28,10 +28,10 @@ Gem::Specification.new do |s|
   s.add_dependency('hashie', ["~> 1.2.0"])
   s.add_dependency('will_paginate', ["~> 3.0.0"])
   s.add_dependency('yajl-ruby', ["~> 1.1.0"])
-  s.add_dependency('activesupport', ["~> 3.1.0"])
+  s.add_dependency('activesupport', ["~> 3.2.0"])
   s.add_dependency('i18n', ["~> 0.6.0"])
   s.add_dependency('sinatra', ["~> 1.3.0"])
-  s.add_dependency('activemodel', ['~> 3.1.0'])
+  s.add_dependency('activemodel', ['~> 3.2.0'])
 
   # HAX
   s.add_dependency('thrift', ['~> 0.8.0'])

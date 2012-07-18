@@ -84,6 +84,7 @@ class Chronologic::Client::Connection
       :query => query,
       :body => event.to_transport
     )
+
     event.published!
 
     handle(resp, "Error publishing event") do

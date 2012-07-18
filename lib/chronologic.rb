@@ -2,7 +2,7 @@ require "hashie"
 require "mongo"
 require "logger"
 require "yajl/json_gem"
-require "active_support/core_ext/module"
+require "active_support/core_ext/object"
 
 module Chronologic
 
